@@ -26,7 +26,7 @@ TraceDR/
 ├── intermediate_data/        # Processed intermediate data
 ├── output/                   # Test results and outputs
 ├── saved/                    # Saved model checkpoints
-└── baseline/                 # Baseline model implementations
+└── baseline/                 # Baseline model
 ```
 
 
@@ -78,7 +78,7 @@ python train_TraceDR.py \
 - `--dropout`: Dropout rate (default: `0.0`)
 - `--max_entities`: Maximum number of entities (default: `100`)
 - `--max_evidences`: Maximum number of evidences (default: `50`)
-- `--encoder_lm`: Encoder language model (`BERT`/`DistilBERT`/`DistilRoBERTa`, default: `BERT`)
+- `--encoder_lm`: Encoder language model (default: `BERT`)
 - `--encoder_linear`: Use linear encoder (flag)
 
 ### Training Parameters
@@ -90,7 +90,7 @@ python train_TraceDR.py \
 - `--clipping_max_norm`: Gradient clipping max norm (default: `1.0`)
 
 ### Data Processing Parameters
-- `--tsf_delimiter`: TSF delimiter (default: `||`)
+- `--tsf_delimiter`: query delimiter (default: `||`)
 - `--max_pos_evidences`: Maximum positive evidences (default: `10`)
 
 ## Evaluation Metrics
