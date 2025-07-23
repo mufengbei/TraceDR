@@ -120,9 +120,7 @@ The system evaluates performance using multiple metrics:
 3. **Evaluation**:
    - Performance measurement using multiple metrics
    - Best model selection based on P@1 score
-   - Detailed result analysis and output generation
-
-## Data Format
+   - Detailed result analysis and output file
 
 
 ### Output Format
