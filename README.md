@@ -1,4 +1,4 @@
-# TraceDR: Trace-based Drug Recommendation with Heterogeneous Graph Neural Networks
+# TraceDR
 This is the code for the paper *Traceable Drug Recommendation over Medical Knowledge Graphs*.
 
 TraceDR is a drug recommendation system that leverages heterogeneous graph neural networks (GNN) to provide personalized and safe medication recommendations based on patient medical history and knowledge graph information.
