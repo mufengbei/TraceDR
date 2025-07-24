@@ -355,7 +355,7 @@ class TraceDRDataset(Dataset):
             else:
                 evidence["is_answering_evidence"] = False
 
-        # 转换为tensor
+        # transform to tensor
         ent_to_ev = torch.from_numpy(ent_to_ev).to_sparse()
         ent_to_ev.requires_grad = False
         ev_to_ent = torch.from_numpy(ev_to_ent).to_sparse()
@@ -365,7 +365,7 @@ class TraceDRDataset(Dataset):
         evidence_labels = torch.from_numpy(evidence_labels).type(torch.LongTensor)
         evidence_labels.requires_grad = False
 
-        # 创建mask
+        # create mask
         entity_mask = num_entities * [1] + (self.max_entities - num_entities) * [0]
         entity_mask = torch.FloatTensor(entity_mask)
         evidence_mask = num_evidences * [1] + (self.max_evidences - num_evidences) * [0]
@@ -375,12 +375,12 @@ class TraceDRDataset(Dataset):
         entities_list = entities_list + (self.max_entities - num_entities) * [{"id": "", "label": "", "type": ""}]
         evidences_list = evidences_list + (self.max_evidences - num_evidences) * [{"evidence_text": "", "contain_entities": []}]
 
-        # 检查训练时是否有答案
+        # check if there is an answer in training
         entity_labels_sum = torch.sum(entity_labels)
         if train and not entity_labels_sum:
             raise ContinueWithNext(f"Answer pruned via max_entities restriction")
 
-        # 归一化邻接矩阵
+        # normalize adjacency matrix
         vec = torch.sum(ent_to_ev.to_dense(), dim=0)
         vec[vec == 0] = 1
         ent_to_ev = ent_to_ev.to_dense() / vec
@@ -409,7 +409,7 @@ class TraceDRDataset(Dataset):
         return instance
 
 def prepare_intermediate_data(data_dir, benchmark, output_dir, part='train'):
-    """准备中间数据"""
+    """prepare intermediate data"""
     retriever = BM25Retriever()
     
     data_path = os.path.join(data_dir, benchmark, f"{part}.pkl")

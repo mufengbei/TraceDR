@@ -49,14 +49,14 @@ def hit_at_k(answers, gold_answers, k=5):
 
 def calculate_p_at_k(predicted_ids, gold_answers, k=5):
     """
-    计算precision@K
-    predicted_ids: 预测的药品id列表
-    gold_answers: 正确的药品id列表
+    calculate precision@K
+    predicted_ids: the predicted drug ids list
+    gold_answers: the correct drug ids list
     """
     if not predicted_ids:
         return 0.0
     
-    # 只考虑前k个预测
+    # only consider the first k predictions
     pred_k = predicted_ids[:k]
     correct = sum(1 for pred_id in pred_k if pred_id in gold_answers)
     return correct / len(pred_k)
@@ -64,28 +64,28 @@ def calculate_p_at_k(predicted_ids, gold_answers, k=5):
 
 def calculate_recall_at_k(predicted_ids, gold_answers, k=5):
     """
-    计算recall@K
-    predicted_ids: 预测的药品id列表
-    gold_answers: 正确的药品id列表
+    calculate recall@K
+    predicted_ids: the predicted drug ids list
+    gold_answers: the correct drug ids list
     """
     if not gold_answers:
         return 1.0
     
-    # 只考虑前k个预测
+    # only consider the first k predictions
     pred_k = predicted_ids[:k]
     correct = sum(1 for gold_id in gold_answers if gold_id in pred_k)
     return correct / len(gold_answers)
 
 
 def calculate_f1_at_k(precision, recall):
-    """计算F1@K分数"""
+    """calculate F1@K score"""
     if precision + recall == 0:
         return 0.0
     return 2 * (precision * recall) / (precision + recall)
 
 
 def jaccard_similarity(predicted_ids, gold_answers, k=5):
-    """计算Jaccard相似度"""
+    """calculate Jaccard similarity"""
     pred_set = set(predicted_ids[:k])
     gold_set = set(gold_answers)
     
@@ -110,17 +110,16 @@ def answer_presence(answers, gold_answers):
 
 def population_allergen_check(answers,idx):
     """
-        综合DDI，从人群和相互作用看
-        DDI:推荐药品前k个中与正在用药有相互作用的个数/k
-        answers: rank后的药品id
-        idx: 病人id
+        DDI: the number of drugs that have interactions with the currently used drugs in the top k recommendations / k
+        answers: the drug ids in the top k recommendations
+        idx: the index of the patient
         """
     topk_drugs = patient_data[idx]['top_k_drugs']
     population = patient_data[idx]['people']["group"]
     allergen = patient_data[idx]['people']["allergen"]
     interaction_list = list()
     DDI_list = [0,0,0,0,0]
-    # 为每个用户提供的人群词创建一个模糊匹配的模式
+    # create a fuzzy matching pattern for each patient's population
     population_patterns = [f"(?i).*{pop}.*" for pop in population]
 
     for idx,answer in enumerate(answers):
@@ -136,7 +135,7 @@ def population_allergen_check(answers,idx):
             drug_populations = set(populations)
             for pattern in population_patterns:
                 for pop in drug_populations:
-                    if re.search(pattern, pop, re.IGNORECASE):  # 进行模糊匹配
+                    if re.search(pattern, pop, re.IGNORECASE):  # fuzzy matching
                         DDI_list[idx] = 1
                         break
         if ingredients_list and allergen:
@@ -151,24 +150,24 @@ def population_allergen_check(answers,idx):
 
 def calculate_DDI(answers,idx):
     """
-    DDI:推荐药品前k个中与正在用药有相互作用的个数/k
-    answers: rank后的药品id
-    idx: 病人id
+    DDI: the number of drugs that have interactions with the currently used drugs in the top k recommendations / k
+    answers: the drug ids in the top k recommendations
+    idx: the index of the patient
     """
     topk_drugs = patient_data[idx]['top_k_drugs']
     on_medicine = patient_data[idx]['people']["on_medicine"]
     interaction_list = list()
     DDI_list = [0,0,0,0,0]
 
-    # 把所有正在用药的相互作用成分添加到列表中
-    # 如果有正在用药才算DDI，否则该病人DDI为0
+    # add all the interactions of the currently used drugs to the list
+    # if there is currently used drugs, then calculate DDI, otherwise the DDI is 0
     if on_medicine:
         for medicine in on_medicine:
             interaction = medicine.get('interaction',[])
             if interaction:
                 for ingre in interaction:
                     interaction_list.append(ingre['name'])
-        # 检查推荐的前k个药品的成分中，是否有与on_medicine的相互作用成分相同的药,说明它们会发生相互作用
+        # check if the ingredients of the top k recommendations have interactions with the currently used drugs
         for idx,answer in enumerate(answers):
             now = topk_drugs.get(answer,[])
             if not now:
@@ -182,7 +181,7 @@ def calculate_DDI(answers,idx):
 
 def calculate_metrics(idx, answers, gold_answers, k=5):
     """
-    计算完整的评估指标，参照evaluation.py中的calculate_metrics函数
+    calculate the complete evaluation metrics, refer to the calculate_metrics function in evaluation.py
     
     Args:
         answers: 排序后的答案列表，每个元素包含{"answer": {"id": ..., "label": ...}, "rank": ..., "score": ...}
@@ -195,14 +194,14 @@ def calculate_metrics(idx, answers, gold_answers, k=5):
     if not answers:
         predicted_ids = []
     else:
-        # 提取前k个预测的id
+        # extract the first k predicted ids
         predicted_ids = []
         for answer in answers:
             if float(answer["rank"]) > float(k):
                 break
             predicted_ids.append(answer["answer"]["id"])
     
-    # 基础指标
+    # basic metrics
     p_at_1 = precision_at_1(answers, gold_answers)
     mrr = mrr_score(answers, gold_answers)
     h_at_5 = hit_at_k(answers, gold_answers, k=5)
@@ -243,7 +242,7 @@ def calculate_metrics(idx, answers, gold_answers, k=5):
 
 def evaluate_predictions(batch, answer_predictions, evidence_predictions=None):
     """
-    评估模型预测结果
+    evaluate the model prediction results
     
     Args:
         batch: 包含gold_answers的批次数据
@@ -259,7 +258,7 @@ def evaluate_predictions(batch, answer_predictions, evidence_predictions=None):
         gold_answers = batch["gold_answers"][b]
         predictions = answer_predictions[b] if answer_predictions else []
         
-        # 计算指标
+        # calculate the metrics
         metrics = calculate_metrics(batch["question_id"][b], predictions, gold_answers, k=5)
         qa_metrics.append(metrics)
     
@@ -268,7 +267,7 @@ def evaluate_predictions(batch, answer_predictions, evidence_predictions=None):
 
 def aggregate_metrics(metrics_list):
     """
-    聚合多个样本的评估指标
+    aggregate the evaluation metrics of multiple samples
     
     Args:
         metrics_list: 评估指标列表，每个元素是一个包含指标的字典
@@ -279,12 +278,12 @@ def aggregate_metrics(metrics_list):
     if not metrics_list:
         return {}
     
-    # 获取所有可能的指标名称
+    # get all the possible metric names
     all_keys = set()
     for metrics in metrics_list:
         all_keys.update(metrics.keys())
     
-    # 计算每个指标的平均值
+    # calculate the average of each metric
     aggregated = {}
     for key in all_keys:
         values = [metrics.get(key, 0.0) for metrics in metrics_list if key in metrics]
@@ -293,7 +292,7 @@ def aggregate_metrics(metrics_list):
         else:
             aggregated[key] = 0.0
     
-    # 添加样本数量
+    # add the number of samples
     aggregated["num_questions"] = len(metrics_list)
     
     return aggregated 
