@@ -6,11 +6,12 @@ TraceDR is a drug recommendation system that leverages heterogeneous graph neura
 
 ## Architecture
 
-The system consists of three main components:
+The system consists of four main components:
 
-1. **FullEncoder**: BERT-based text encoder that processes patient information, entities, and evidences
-2. **HeterogeneousGNN**: Multi-layer graph neural network that performs message passing between entities and evidences
-3. **MultitaskBilinearAnswering**: Bilinear answering module for drug recommendation and evidence ranking
+1. **TraceDRDataset**: Data processing and graph construction.
+2. **FullEncoder**: BERT-based text encoder that processes patient information, entities, and evidences
+3. **HeterogeneousGNN**: Multi-layer graph neural network that performs message passing between entities and evidences
+4. **MultitaskBilinearAnswering**: Bilinear answering module for drug recommendation and evidence ranking
 
 ## Project Structure
 
