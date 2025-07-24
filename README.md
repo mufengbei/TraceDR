@@ -1,4 +1,4 @@
-# TraceDR: Trace-based Drug Recommendation with Heterogeneous Graph Neural Networks
+# TraceDR
 This is the code for the paper *Traceable Drug Recommendation over Medical Knowledge Graphs*.
 
 TraceDR is a drug recommendation system that leverages heterogeneous graph neural networks (GNN) to provide personalized and safe medication recommendations based on patient medical history and knowledge graph information.
@@ -26,7 +26,7 @@ TraceDR/
 ├── intermediate_data/        # Processed intermediate data
 ├── output/                   # Test results and outputs
 ├── saved/                    # Saved model checkpoints
-└── baseline/                 # Baseline model implementations
+└── baseline/                 # Baseline model
 ```
 
 
@@ -78,7 +78,7 @@ python train_TraceDR.py \
 - `--dropout`: Dropout rate (default: `0.0`)
 - `--max_entities`: Maximum number of entities (default: `100`)
 - `--max_evidences`: Maximum number of evidences (default: `50`)
-- `--encoder_lm`: Encoder language model (`BERT`/`DistilBERT`/`DistilRoBERTa`, default: `BERT`)
+- `--encoder_lm`: Encoder language model (default: `BERT`)
 - `--encoder_linear`: Use linear encoder (flag)
 
 ### Training Parameters
@@ -90,7 +90,7 @@ python train_TraceDR.py \
 - `--clipping_max_norm`: Gradient clipping max norm (default: `1.0`)
 
 ### Data Processing Parameters
-- `--tsf_delimiter`: TSF delimiter (default: `||`)
+- `--tsf_delimiter`: query delimiter (default: `||`)
 - `--max_pos_evidences`: Maximum positive evidences (default: `10`)
 
 ## Evaluation Metrics
@@ -120,9 +120,7 @@ The system evaluates performance using multiple metrics:
 3. **Evaluation**:
    - Performance measurement using multiple metrics
    - Best model selection based on P@1 score
-   - Detailed result analysis and output generation
-
-## Data Format
+   - Detailed result analysis and output file
 
 
 ### Output Format

@@ -198,16 +198,13 @@ class TraceDRDataset(Dataset):
             dataset = pickle.load(f)
 
         instances = list()
-        num = 0
+        # num = 0
         for idx, turn in tqdm(dataset.items()):
-            if num >= 10:
-                break
             try:
                 instance = self.prepare_turn(idx, turn, train)
                 instances.append(instance)
             except ContinueWithNext:
                 continue
-            num += 1
         ans_pres_list = [1 if sum(instance["evidence_labels"]) > 0 else 0 for instance in instances]
         ans_pres = sum(ans_pres_list) / len(ans_pres_list)
         print(f"Answer presence: {ans_pres:.3f}, Number of questions: {len(ans_pres_list)}")
