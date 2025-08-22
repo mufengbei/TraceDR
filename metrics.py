@@ -243,14 +243,6 @@ def calculate_metrics(idx, answers, gold_answers, k=5):
 def evaluate_predictions(batch, answer_predictions, evidence_predictions=None):
     """
     evaluate the model prediction results
-    
-    Args:
-        batch: 包含gold_answers的批次数据
-        answer_predictions: 答案预测结果列表
-        evidence_predictions: 证据预测结果列表（可选）
-    
-    Returns:
-        list: 每个样本的评估指标列表
     """
     qa_metrics = []
     
@@ -268,12 +260,6 @@ def evaluate_predictions(batch, answer_predictions, evidence_predictions=None):
 def aggregate_metrics(metrics_list):
     """
     aggregate the evaluation metrics of multiple samples
-    
-    Args:
-        metrics_list: 评估指标列表，每个元素是一个包含指标的字典
-    
-    Returns:
-        dict: 聚合后的平均指标
     """
     if not metrics_list:
         return {}
