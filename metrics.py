@@ -184,12 +184,12 @@ def calculate_metrics(idx, answers, gold_answers, k=5):
     calculate the complete evaluation metrics, refer to the calculate_metrics function in evaluation.py
     
     Args:
-        answers: 排序后的答案列表，每个元素包含{"answer": {"id": ..., "label": ...}, "rank": ..., "score": ...}
-        gold_answers: 正确答案的id列表
-        k: 计算top-k指标时的k值
+        answers: Sorted list of answers, each element containing {"answer": {"id": ..., "label": ...}, "rank": ..., "score": ...}
+        gold_answers: correct answer IDs list.
+        k: The value of k when calculating top-k indicators
     
     Returns:
-        dict: 包含各种评估指标的字典
+        dict: dict containing various evaluation indicators
     """
     if not answers:
         predicted_ids = []

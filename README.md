@@ -98,9 +98,9 @@ python train_TraceDR.py \
 
 The system evaluates performance using multiple metrics:
 
-- **P@1**: Precision at rank 1
-- **MRR**: Mean Reciprocal Rank
-- **Hit@5**: Hit rate at top 5
+- **P@k**: Precision at top-K
+- **R@K**: Recall at top-K
+- **f1@k**: F1 at top-K
 - **Jaccard**: Jaccard similarity coefficient
 - **F1@K**: F1 score at top K
 - **Answer Presence**: Presence of correct answers in candidates
